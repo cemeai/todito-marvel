@@ -25,16 +25,17 @@ class User {
       const db = await getDatabase();
       const connection = db.getConnection();
       
-      const [result] = await connection.execute(
-        'INSERT INTO users (email, password_hash, full_name, role) VALUES (?, ?, ?, ?)',
+      const result = await connection.query(
+        'INSERT INTO users (email, password_hash, full_name, role) VALUES ($1, $2, $3, $4) RETURNING id',
         [email, passwordHash, fullName, role]
       );
       
-      console.log(`Usuario creado con ID: ${result.insertId}`);
-      return await User.findById(result.insertId);
+      const insertedId = result.rows[0].id;
+      console.log(`Usuario creado con ID: ${insertedId}`);
+      return await User.findById(insertedId);
       
     } catch (error) {
-      if (error.code === 'ER_DUP_ENTRY') {
+      if (error.code === '23505') { // PostgreSQL unique constraint violation
         throw new Error('El email ya está registrado');
       }
       console.error('Error creando usuario:', error.message);
@@ -48,16 +49,16 @@ class User {
       const db = await getDatabase();
       const connection = db.getConnection();
       
-      const [rows] = await connection.execute(
-        'SELECT * FROM users WHERE email = ? AND is_active = TRUE',
+      const result = await connection.query(
+        'SELECT * FROM users WHERE email = $1 AND is_active = TRUE',
         [email]
       );
       
-      if (rows.length === 0) {
+      if (result.rows.length === 0) {
         return null;
       }
       
-      const userData = rows[0];
+      const userData = result.rows[0];
       return new User(
         userData.id,
         userData.email,
@@ -81,16 +82,16 @@ class User {
       const db = await getDatabase();
       const connection = db.getConnection();
       
-      const [rows] = await connection.execute(
-        'SELECT * FROM users WHERE id = ? AND is_active = TRUE',
+      const result = await connection.query(
+        'SELECT * FROM users WHERE id = $1 AND is_active = TRUE',
         [id]
       );
       
-      if (rows.length === 0) {
+      if (result.rows.length === 0) {
         return null;
       }
       
-      const userData = rows[0];
+      const userData = result.rows[0];
       return new User(
         userData.id,
         userData.email,
@@ -124,8 +125,8 @@ class User {
       const db = await getDatabase();
       const connection = db.getConnection();
       
-      await connection.execute(
-        'UPDATE users SET two_factor_secret = ?, two_factor_enabled = ? WHERE id = ?',
+      await connection.query(
+        'UPDATE users SET two_factor_secret = $1, two_factor_enabled = $2 WHERE id = $3',
         [secret, enabled, this.id]
       );
       
@@ -160,12 +161,12 @@ class User {
       const db = await getDatabase();
       const connection = db.getConnection();
       
-      const [rows] = await connection.execute(
-        'SELECT id, email, full_name, two_factor_enabled, is_active, created_at FROM users ORDER BY created_at DESC LIMIT ?',
+      const result = await connection.query(
+        'SELECT id, email, full_name, role, two_factor_enabled, is_active, created_at FROM users ORDER BY created_at DESC LIMIT $1',
         [limit]
       );
       
-      return rows.map(userData => ({
+      return result.rows.map(userData => ({
         id: userData.id,
         email: userData.email,
         fullName: userData.full_name,

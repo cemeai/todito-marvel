@@ -1,4 +1,4 @@
-const mysql = require('mysql2/promise');
+const { Client } = require('pg');
 const { config } = require('../config/config');
 
 class DatabaseConnection {
@@ -8,18 +8,20 @@ class DatabaseConnection {
 
   async connect() {
     try {
-      this.connection = await mysql.createConnection({
+      this.connection = new Client({
         host: config.database.host,
         user: config.database.user,
         password: config.database.password,
         database: config.database.name,
-        port: config.database.port || 3306
+        port: config.database.port || 5432,
+        ssl: config.database.ssl || { rejectUnauthorized: false }
       });
       
-      console.log('Conectado a MariaDB exitosamente');
+      await this.connection.connect();
+      console.log('Conectado a PostgreSQL (Supabase) exitosamente');
       return this.connection;
     } catch (error) {
-      console.error('Error conectando a MariaDB:', error.message);
+      console.error('Error conectando a PostgreSQL:', error.message);
       throw error;
     }
   }
@@ -27,7 +29,7 @@ class DatabaseConnection {
   async disconnect() {
     if (this.connection) {
       await this.connection.end();
-      console.log('Desconectado de MariaDB');
+      console.log('Desconectado de PostgreSQL');
     }
   }
 
