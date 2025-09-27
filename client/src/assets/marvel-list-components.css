@@ -1,0 +1,195 @@
+/* 
+ * Marvel List Components - Shared Styles
+ * Estilos compartidos para ComicList, CharacterList, y StoryList
+ */
+
+/* ===== SEARCH SECTION ===== */
+.search-section {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #ED1D24;
+  border-radius: 0;
+  font-size: 16px;
+  outline: none;
+  transition: box-shadow 0.3s ease;
+}
+
+.search-input:focus {
+  box-shadow: 0 0 10px rgba(237, 29, 36, 0.3);
+}
+
+.clear-search-btn {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #ED1D24;
+  color: white;
+  border: none;
+  border-radius: 0;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.clear-search-btn:hover {
+  background: #c41e1e;
+}
+
+/* ===== COMMON STATES ===== */
+.no-results {
+  text-align: center;
+  color: #666;
+  padding: 20px;
+  font-style: italic;
+}
+
+.error {
+  color: #ED1D24;
+  text-align: center;
+  padding: 20px;
+  font-weight: 600;
+}
+
+/* ===== GRID LAYOUT ===== */
+.marvel-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2rem;
+  padding: 2rem 0;
+}
+
+/* ===== CARD STYLES ===== */
+.marvel-card {
+  background: white;
+  border-radius: 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+  border: 2px solid transparent;
+}
+
+.marvel-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(237, 29, 36, 0.2);
+  border-color: #ED1D24;
+}
+
+/* ===== IMAGE PLACEHOLDER ===== */
+.marvel-image-placeholder {
+  width: 100%;
+  height: 320px;
+  background: linear-gradient(135deg, #f0f0f0, #e0e0e0);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #888;
+  font-size: 14px;
+}
+
+/* ===== CARD CONTENT ===== */
+.marvel-content {
+  padding: 1.5rem;
+}
+
+.marvel-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #4A4A4A;
+  margin: 0 0 0.5rem 0;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.marvel-description {
+  color: #555;
+  font-size: 14px;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-bottom: 1rem;
+  min-height: 63px;
+}
+
+/* ===== CARD META ===== */
+.marvel-meta {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-top: 1px solid #eee;
+  padding-top: 1rem;
+}
+
+.marvel-price {
+  color: #ED1D24;
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.marvel-date {
+  color: #666;
+  font-size: 0.85rem;
+  font-style: italic;
+}
+
+/* ===== CONTAINER STYLES ===== */
+.marvel-list {
+  min-height: 70vh;
+}
+
+.marvel-container {
+  max-height: 70vh;
+  overflow-y: auto;
+  padding-right: 10px;
+}
+
+/* ===== SCROLLBAR STYLES ===== */
+.marvel-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.marvel-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.marvel-container::-webkit-scrollbar-thumb {
+  background: #ED1D24;
+  border-radius: 4px;
+}
+
+.marvel-container::-webkit-scrollbar-thumb:hover {
+  background: #c41e1e;
+}
+
+/* ===== LOADING STATES ===== */
+.loading-message {
+  text-align: center;
+  color: #666;
+  padding: 20px;
+  font-style: italic;
+}
+
+.search-loading {
+  text-align: center;
+  color: #ED1D24;
+  padding: 10px;
+  font-weight: 600;
+}

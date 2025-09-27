@@ -1,0 +1,26 @@
+# ================================
+# Marvel Universe Explorer
+# ================================
+
+# ===== ARCHIVOS SENSIBLES =====
+# Variables de entorno con credenciales Marvel API y DB
+.env
+
+# ===== NODE.JS =====
+# Dependencias
+node_modules/
+
+# ===== BUILDS =====
+# Client build (Vite)
+client/dist/
+
+# ===== CACHE =====
+# Vite cache
+client/.vite/
+
+# ===== LOGS =====
+*.log
+
+# ===== SISTEMA =====
+.DS_Store
+Thumbs.db
