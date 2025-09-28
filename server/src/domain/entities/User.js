@@ -1,5 +1,5 @@
 const bcrypt = require('bcrypt');
-const { getDatabase } = require('../../infrastructure/database/database');
+const fileStorage = require('../../infrastructure/storage/FileStorage');
 const { config } = require('../../infrastructure/config/config');
 
 class User {
@@ -14,6 +14,20 @@ class User {
     this.isActive = isActive;
   }
 
+  // Create User instance from file data
+  static fromData(userData) {
+    return new User(
+      userData.id,
+      userData.email,
+      userData.password_hash,
+      userData.full_name,
+      userData.role,
+      userData.two_factor_secret,
+      userData.two_factor_enabled,
+      userData.is_active
+    );
+  }
+
   // Crear nuevo usuario
   static async create(userData) {
     const { email, password, fullName, role = 2 } = userData; // Default role = user
@@ -22,53 +36,32 @@ class User {
     const passwordHash = await bcrypt.hash(password, config.auth.bcryptRounds);
     
     try {
-      const db = await getDatabase();
-      const connection = db.getConnection();
+      const newUser = await fileStorage.createUser({
+        email,
+        password_hash: passwordHash,
+        full_name: fullName,
+        role
+      });
       
-      const result = await connection.query(
-        'INSERT INTO users (email, password_hash, full_name, role) VALUES ($1, $2, $3, $4) RETURNING id',
-        [email, passwordHash, fullName, role]
-      );
-      
-      const insertedId = result.rows[0].id;
-      console.log(`Usuario creado con ID: ${insertedId}`);
-      return await User.findById(insertedId);
+      console.log(`Usuario creado con ID: ${newUser.id}`);
+      return User.fromData(newUser);
       
     } catch (error) {
-      if (error.code === '23505') { // PostgreSQL unique constraint violation
-        throw new Error('El email ya está registrado');
-      }
       console.error('Error creando usuario:', error.message);
-      throw new Error('Error al crear usuario');
+      throw error;
     }
   }
 
   // Buscar usuario por email
   static async findByEmail(email) {
     try {
-      const db = await getDatabase();
-      const connection = db.getConnection();
+      const userData = await fileStorage.findUserByEmail(email);
       
-      const result = await connection.query(
-        'SELECT * FROM users WHERE email = $1 AND is_active = TRUE',
-        [email]
-      );
-      
-      if (result.rows.length === 0) {
+      if (!userData) {
         return null;
       }
       
-      const userData = result.rows[0];
-      return new User(
-        userData.id,
-        userData.email,
-        userData.password_hash,
-        userData.full_name,
-        userData.role,
-        userData.two_factor_secret,
-        userData.two_factor_enabled,
-        userData.is_active
-      );
+      return User.fromData(userData);
       
     } catch (error) {
       console.error('Error buscando usuario por email:', error.message);

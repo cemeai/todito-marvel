@@ -17,12 +17,13 @@ const config = {
   },
 
   database: {
+    connectionString: process.env.DATABASE_URL,
     host: process.env.DB_HOST || 'localhost',
     user: process.env.DB_USER || 'postgres',
     password: process.env.DB_PASSWORD || '',
     name: process.env.DB_NAME || 'postgres',
     port: process.env.DB_PORT || 5432,
-    ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
+    ssl: process.env.DB_HOST && process.env.DB_HOST.includes('supabase.co') ? { rejectUnauthorized: false } : false
   },
 
   auth: {

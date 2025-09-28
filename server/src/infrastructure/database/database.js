@@ -8,14 +8,19 @@ class DatabaseConnection {
 
   async connect() {
     try {
-      this.connection = new Client({
-        host: config.database.host,
-        user: config.database.user,
-        password: config.database.password,
-        database: config.database.name,
-        port: config.database.port || 5432,
-        ssl: config.database.ssl || { rejectUnauthorized: false }
-      });
+      // Always use connection string if available for Supabase
+      const connectionConfig = config.database.connectionString 
+        ? { connectionString: config.database.connectionString, ssl: { rejectUnauthorized: false } }
+        : {
+            host: config.database.host,
+            user: config.database.user,
+            password: config.database.password,
+            database: config.database.name,
+            port: config.database.port || 5432,
+            ssl: config.database.ssl || { rejectUnauthorized: false }
+          };
+
+      this.connection = new Client(connectionConfig);
       
       await this.connection.connect();
       console.log('Conectado a PostgreSQL (Supabase) exitosamente');
