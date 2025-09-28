@@ -5,7 +5,7 @@ export class CharactersService {
   private apiUrl: string
 
   constructor() {
-    this.apiUrl = 'http://localhost:3000/api'
+    this.apiUrl = 'https://todito-marvel.onrender.com/api'
   }
 
   async getCharacters(offset: number = 0, limit: number = 20): Promise<Character[]> {

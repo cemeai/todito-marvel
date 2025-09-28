@@ -3,7 +3,7 @@ export class AuthService {
   private apiUrl: string
 
   constructor() {
-    this.apiUrl = 'http://localhost:3000/auth'
+    this.apiUrl = 'https://todito-marvel.onrender.com/auth'
   }
 
   // Helper para obtener headers con token

@@ -5,7 +5,7 @@ export class ComicsService {
   private apiUrl: string
 
   constructor() {
-    this.apiUrl = 'http://localhost:3000/api'
+    this.apiUrl = 'https://todito-marvel.onrender.com/api'
   }
 
   async getComics(offset: number = 0, limit: number = 20): Promise<Comic[]> {

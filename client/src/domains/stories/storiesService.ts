@@ -5,7 +5,7 @@ export class StoriesService {
   private apiUrl: string
 
   constructor() {
-    this.apiUrl = 'http://localhost:3000/api'
+    this.apiUrl = 'https://todito-marvel.onrender.com/api'
   }
 
   async getStories(offset: number = 0, limit: number = 20): Promise<Story[]> {
