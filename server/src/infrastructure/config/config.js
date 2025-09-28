@@ -36,7 +36,7 @@ const config = {
     // Configuración dinámica para desarrollo y producción
     origins: process.env.NODE_ENV === 'production' 
       ? (process.env.CORS_ORIGINS ? process.env.CORS_ORIGINS.split(',') : [
-          'https://todito-marvel-frontend.onrender.com',
+          'https://todito-marvel-app.onrender.com',
           'https://todito-marvel-client.onrender.com',
           'https://todito-marvel.netlify.app',
           'https://todito-marvel.vercel.app',
